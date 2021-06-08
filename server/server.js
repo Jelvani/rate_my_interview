@@ -4,16 +4,43 @@ const mc = require("mongodb").MongoClient;
 const mongoose = require('mongoose');
 const cors = require("cors");
 require("dotenv").config({ path: "./config.env" });
-const routes = require("./routes/reviews");
-
-var wordFilter = require('bad-words');
-filter = new wordFilter();
-
+const routes = require("./routes/routes");
+var session = require('express-session')
 const port = process.env.PORT;
-app.use(cors());
+
+
+
+// var wordFilter = require('bad-words');
+// filter = new wordFilter();
+
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}))
+
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.json());
 app.use("/",routes);
+
+//this middleware us for initializing our session variables on a first request
+app.use((req, res, next) => {
+    if(!req.session.init){
+        req.session.init = true;
+        req.session.validated = false;
+    }
+    next();
+});
 const uri = process.env.ATLAS_URI;
+
+
+
 
 // let db = null;
 // let collection = null;
