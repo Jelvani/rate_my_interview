@@ -35,14 +35,19 @@ exports.postReview = [
 ];
 
 exports.checkValidation = async (req, res, next) => {
-
+    console.log(req.session);
     if(!req.session.validated){
         res.status(404);
+        console.log("validation failed!")
     }else{
         next();
     }
 };
-
+exports.logout = async (req, res) => {
+    req.session.destroy();
+    res.status(201);
+    //res.redirect("http://localhost:3000/")
+}
 exports.google = async (req, res) => {
 
     const ticket = await client.verifyIdToken({
@@ -52,10 +57,9 @@ exports.google = async (req, res) => {
     const payload = ticket.getPayload();
     const userid = payload['sub'];
 
-    console.log("before: ",req.session.userId);
+    
     req.session.validated = true;
     
-    console.log("after: ", req.session.userId);
 
     res.status(201);
     res.json({userid: payload});
