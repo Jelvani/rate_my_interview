@@ -35,9 +35,8 @@ exports.postReview = [
 ];
 
 exports.checkValidation = async (req, res, next) => {
-    console.log(req.session);
     if(!req.session.validated){
-        res.status(404);
+        res.status(400).send("Authentication error!");
         console.log("validation failed!")
     }else{
         next();
@@ -46,7 +45,6 @@ exports.checkValidation = async (req, res, next) => {
 exports.logout = async (req, res) => {
     req.session.destroy();
     res.status(201);
-    //res.redirect("http://localhost:3000/")
 }
 exports.google = async (req, res) => {
 
