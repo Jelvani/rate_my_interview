@@ -5,7 +5,7 @@
 
 const Contact = require("../models/contact_entry");
 
-exports.contact_add_entry = async (req, res) => {
+exports.contact_add_entry = async (req, res, next) => {
 
     const contact = new Contact({
         firstName: req.body.firstname,
@@ -15,7 +15,8 @@ exports.contact_add_entry = async (req, res) => {
         date: new Date(),
         ip: req.connection.remoteAddress
     });
-    await contact.save();
+    contact.save();
     console.log("saved")
     res.sendStatus(200);
+    next();
 };

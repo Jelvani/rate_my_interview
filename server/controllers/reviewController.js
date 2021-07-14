@@ -6,9 +6,8 @@
 const Review = require("../models/review_entry");
 var wordFilter = require('bad-words');
 filter = new wordFilter();
-const { body,validationResult } = require('express-validator');
 
-exports.review_add_post = async (req, res) => {
+exports.review_add_post = async (req, res, next) => {
 
     const review = new Review({
         company: req.body.company,
@@ -17,12 +16,13 @@ exports.review_add_post = async (req, res) => {
         date: new Date(),
         ip: req.connection.remoteAddress
     });
-    await review.save();
+    review.save();
     res.sendStatus(200);
+    next();
 };
 
 
-exports.reviews_get = async (req, res) => {
+exports.reviews_get = async (req, res, next) => {
 
 
     const result = await Review.find({}, { company: 1, review: 1, rating: 1, date: 1 });
@@ -40,7 +40,7 @@ exports.reviews_get = async (req, res) => {
         //fix date format issue
     });
     res.json(resultJson);
-
+    next();
 };
 
 

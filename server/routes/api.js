@@ -10,4 +10,5 @@ router.get("/reviews", review_controller.reviews_get);
 router.post("/validate/google", validate.google);
 router.post("/contact", validate.checkValidation, contact_controller.contact_add_entry);
 
+
 module.exports = router;

@@ -35,8 +35,9 @@ exports.postReview = [
 ];
 
 exports.checkValidation = async (req, res, next) => {
+    
     if(!req.session.validated){
-        res.status(400).send("Authentication error!");
+        res.sendStatus(400);
         console.log("validation failed!")
     }else{
         next();
