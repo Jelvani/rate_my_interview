@@ -40,7 +40,8 @@ exports.reviews_get = async (req, res, next) => {
         //fix date format issue
     });
     res.json(resultJson);
-    next();
+    res.end()
+    //next();
 };
 
 

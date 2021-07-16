@@ -44,8 +44,13 @@ exports.checkValidation = async (req, res, next) => {
     }
 };
 exports.logout = async (req, res) => {
-    req.session.destroy();
-    res.status(201);
+    if(!req.session.validated){
+        res.sendStatus(400);
+    }else{
+        req.session.destroy();
+        res.sendStatus(200);
+    }
+    
 }
 exports.google = async (req, res) => {
 
