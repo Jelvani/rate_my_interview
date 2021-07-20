@@ -29,15 +29,16 @@ exports.reviews_get = async (req, res, next) => {
 
     let resultJson = JSON.parse(JSON.stringify(result));
 
-    resultJson.forEach(function (entry, i){
+    resultJson.forEach(function (entry, i) {
         if (!(entry.company || entry.review || entry.date || entry.rating)) {
             return; //same as 'continue' in normal loop
         }
-        
+
         resultJson[i].company = filter.clean(entry.company);
         resultJson[i].review = filter.clean(entry.review);
-        resultJson[i].date = entry.date//.toDateString();
-        //fix date format issue
+        date = new Date(entry.date)
+        resultJson[i].date = String(date.toLocaleString('default', { month: 'long' })).concat(" ", date.getDate(), ", ", date.getFullYear())
+
     });
     res.json(resultJson);
     res.end()
