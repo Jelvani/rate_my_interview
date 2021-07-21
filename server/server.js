@@ -28,15 +28,14 @@ store.on('error', function (error) {
 });
 
 app.use(session({
-    secret: 'einfewiufe',
+    //Random secret is bad for loadbalancing, and restaring service
+    secret: require('crypto').randomBytes(64).toString('hex'),
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 3600000, secure: false },
+    cookie: {secure: false },
     proxy: true,
     store: store
 }));
-
-
 
 
 //this middleware us for initializing our session variables on a first request
@@ -45,24 +44,17 @@ app.use((req, res, next) => {
         req.session.init = true;
         req.session.validated = false;
     }
-    console.log("Session ID: ", req.session.id);
     next();
 });
 
-/*
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-    maxAge: 3600000
-}));
-*/
+
 app.use(express.json());
 app.use("/api", api);
 app.use("/*", undef);
 
 
 app.listen(port, () => {
-
+    console.log("Running in ", process.env.NODE_ENV, " mode")
     mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));

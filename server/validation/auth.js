@@ -35,36 +35,37 @@ exports.postReview = [
 ];
 
 exports.checkValidation = async (req, res, next) => {
-    
-    if(!req.session.validated){
+
+    if (!req.session.validated) {
         res.sendStatus(400);
         console.log("validation failed!")
-    }else{
+    } else {
         next();
     }
 };
 exports.logout = async (req, res) => {
-    if(!req.session.validated){
+    if (!req.session.validated) {
         res.sendStatus(400);
-    }else{
+    } else {
         req.session.destroy();
         res.sendStatus(200);
     }
-    
+
 }
 exports.google = async (req, res) => {
 
-    const ticket = await client.verifyIdToken({
-        idToken: req.body.token,
-        audience: process.env.CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-    const userid = payload['sub'];
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: req.body.token,
+            audience: process.env.CLIENT_ID
+        });
+        const payload = ticket.getPayload();
+        req.session.validated = true;
+        res.status(201);
+        res.json({ userid: payload });
+    } catch (err) {
+        console.log("Google Validation Failed!")
+        res.sendStatus(401);
+    }
 
-    
-    req.session.validated = true;
-    
-
-    res.status(201);
-    res.json({userid: payload});
 };
