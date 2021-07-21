@@ -35,3 +35,9 @@ To prepare project for production, run `npm run build`. This will bundle react i
 
 * `package.json`
     * This contains all our dependecies for `npm` to use. It also contains some scripts, which allow us to get our server and front end running in development and production. Also notice it contains a proxy parameter. This is used when the client and server are running on different ports during production. It allows the client to proxy requests to the servers port, which avoids the need for [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+
+## Resources
+
+[Express Intro](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/Introduction)
+
+[MERN Stack Intro](https://www.mongodb.com/languages/mern-stack-tutorial)
